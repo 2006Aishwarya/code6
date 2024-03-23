@@ -1,0 +1,89 @@
+CREATE TABLE Students (
+    StudentID INT AUTO_INCREMENT PRIMARY KEY,
+    Name VARCHAR(100),
+    age INT,
+    class INT,
+    contact_no BIGINT, -- Modify contact_no to BIGINT
+    email VARCHAR(100)
+);
+
+-- Ensure contact_no is modified to BIGINT
+ALTER TABLE Students MODIFY contact_no BIGINT;
+
+-- Insert student records
+INSERT INTO Students (Name, age, class, contact_no, email) VALUES
+('sriya', 14, 9, 1253667365, 'sriya23@gmail.com');
+
+-- Create Timetables table
+CREATE TABLE Timetables (
+    TimetableID INT AUTO_INCREMENT PRIMARY KEY,
+    Period INT,
+    StartTime TIME,
+    EndTime TIME,
+    Monday VARCHAR(50),
+    Tuesday VARCHAR(50),
+    Wednesday VARCHAR(50),
+    Thursday VARCHAR(50),
+    Friday VARCHAR(50)
+);
+
+-- Insert timetable values
+INSERT INTO Timetables (Period, StartTime, EndTime, Monday, Tuesday, Wednesday, Thursday, Friday) VALUES
+(1, '08:00:00', '08:50:00', 'Maths', 'English', 'Physics', 'Chemistry', 'Biology'),
+(2, '08:50:00', '09:40:00', 'English', 'Physics', 'Chemistry', 'Biology', 'Maths'),
+(3, '09:40:00', '09:55:00', 'SHORT-BREAK', 'SHORT-BREAK', 'SHORT-BREAK', 'SHORT-BREAK', 'SHORT-BREAK'),
+(4, '09:55:00', '10:45:00', 'Chemistry', 'Biology', 'Maths', 'English', 'Physics'),
+(5, '10:45:00', '11:35:00', 'Biology', 'Maths', 'English', 'Physics', 'Chemistry');
+
+-- Create Student_Timetable table with the correct definition
+CREATE TABLE Student_Timetable (
+    StudentID INT,
+    TimetableID INT,
+    PRIMARY KEY (StudentID, TimetableID), -- Define a composite primary key
+    FOREIGN KEY (StudentID) REFERENCES Students(StudentID),
+    FOREIGN KEY (TimetableID) REFERENCES Timetables(TimetableID)
+);
+
+-- Assign the first timetable (TimetableID = 1) to Student 1 (StudentID = 1)
+INSERT INTO Student_Timetable (StudentID, TimetableID) VALUES (1, 1);
+INSERT INTO Student_Timetable (StudentID, TimetableID) VALUES (1, 2);
+INSERT INTO Student_Timetable (StudentID, TimetableID) VALUES (1, 3);
+INSERT INTO Student_Timetable (StudentID, TimetableID) VALUES (1, 4);
+INSERT INTO Student_Timetable (StudentID, TimetableID) VALUES (1, 5);
+
+-- Show timetable for Student 1
+SELECT Timetables.*
+FROM Timetables
+JOIN Student_Timetable ON Timetables.TimetableID = Student_Timetable.TimetableID
+WHERE Student_Timetable.StudentID = 1;
+
+-- Create Timetable2 table
+CREATE TABLE Timetable2 (
+    TimetableID INT AUTO_INCREMENT PRIMARY KEY,
+    Period INT,
+    StartTime TIME,
+    EndTime TIME,
+    Monday VARCHAR(50),
+    Tuesday VARCHAR(50),
+    Wednesday VARCHAR(50),
+    Thursday VARCHAR(50),
+    Friday VARCHAR(50)
+);
+
+-- Insert timetable values for Student 2 (Shreya)
+INSERT INTO Timetable2 (Period, StartTime, EndTime, Monday, Tuesday, Wednesday, Thursday, Friday) VALUES
+(1, '08:00:00', '08:50:00', 'Dance', 'Music', 'Physical Activity', 'Dance', 'Music'),
+(2, '08:50:00', '09:40:00', 'Music', 'Physical Activity', 'Dance', 'Music', 'Physical Activity'),
+(3, '09:40:00', '09:55:00', 'SHORT-BREAK', 'SHORT-BREAK', 'SHORT-BREAK', 'SHORT-BREAK', 'SHORT-BREAK'),
+(4, '09:55:00', '10:45:00', 'Physical Activity', 'Dance', 'Music', 'Physical Activity', 'Dance'),
+(5, '10:45:00', '11:35:00', 'Music', 'Physical Activity', 'Dance', 'Music', 'Physical Activity');
+
+-- Assign the timetable (TimetableID) from Timetable2 to Student 2 (Shreya)
+INSERT INTO Student_Timetable (StudentID, TimetableID) values (2,1);
+
+SELECT Timetable2.*
+FROM Timetable2
+JOIN student_timetable on timetable2.timetableID=student_Timetable.TimetableID
+WHERE Student_Timetable.StudentID=2;
+-- View the timetable for Shreya from Timetable2
+
